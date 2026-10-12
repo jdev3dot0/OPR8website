@@ -1,0 +1,68 @@
+# Local WordPress stack for OPR8-IT.
+# Uses host networking because Docker bridge inter-container TCP is blocked in some Cloud Agent VMs.
+services:
+  db:
+    image: mysql:8.0
+    network_mode: host
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: wordpress
+      MYSQL_ROOT_PASSWORD: rootpass
+    command:
+      - --bind-address=127.0.0.1
+      - --port=33123
+      - --default-authentication-plugin=mysql_native_password
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-P", "33123", "-uroot", "-prootpass"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+
+  wordpress:
+    image: wordpress:php8.2-apache
+    network_mode: host
+    restart: unless-stopped
+    environment:
+      WORDPRESS_DB_HOST: 127.0.0.1:33123
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_CONFIG_EXTRA: |
+        define('WP_HOME', 'http://127.0.0.1:43123');
+        define('WP_SITEURL', 'http://127.0.0.1:43123');
+    volumes:
+      - wp_data:/var/www/html
+      - ./wp-content/themes/opr8-it:/var/www/html/wp-content/themes/opr8-it
+      - ./content:/var/www/html/opr8-content:ro
+      - ./scripts:/var/www/html/opr8-scripts:ro
+      - ./docker/apache-port.conf:/etc/apache2/ports.conf:ro
+      - ./docker/000-default.conf:/etc/apache2/sites-enabled/000-default.conf:ro
+    depends_on:
+      db:
+        condition: service_healthy
+
+  wpcli:
+    image: wordpress:cli-php8.2
+    network_mode: host
+    user: "0:0"
+    environment:
+      WORDPRESS_DB_HOST: 127.0.0.1:33123
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_DB_NAME: wordpress
+      WP_CLI_ALLOW_ROOT: "1"
+    volumes:
+      - wp_data:/var/www/html
+      - ./wp-content/themes/opr8-it:/var/www/html/wp-content/themes/opr8-it
+      - ./content:/var/www/html/opr8-content:ro
+      - ./scripts:/var/www/html/opr8-scripts:ro
+    profiles:
+      - tools
+
+volumes:
+  db_data:
+  wp_data:
