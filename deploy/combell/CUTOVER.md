@@ -10,9 +10,14 @@ Authoritative production domain: **opr8-it.be** (+ **www**). This is a migration
 | Web A | `46.30.213.161` |
 | Mail MX | one.com mailpods |
 
+## Combell product
+
+- Panel product URL: https://my.combell.com/nl/product/webhosting/linux/opr8-it.be  
+  (Linux webhosting for `opr8-it.be`; unauthenticated access redirects to identity.combell.com login.)
+
 ## Credentials / access needed from user
 
-- [ ] Combell login (or agency invite) with WordPress hosting
+- [ ] Combell login (email/customer number + password, or agency invite) for the product above
 - [ ] Confirm mail stays at one.com **or** provide Combell/third-party MX targets
 - [ ] Confirm only `opr8-it.be` / `www` (no other production hostname)
 
