@@ -1,0 +1,28 @@
+{
+  "siteTitle": "OPR8-IT",
+  "tagline": "IT Support",
+  "locale": "nl_NL",
+  "frontPageSlug": "diensten",
+  "menu": [
+    { "slug": "diensten", "label": "Diensten" },
+    { "slug": "contact", "label": "Contact" },
+    { "slug": "wie-is-opr8-it", "label": "Wie is OPR8-IT?" },
+    { "slug": "websites", "label": "Websites" },
+    { "slug": "opr8-it-drones", "label": "OPR8-IT & drones" }
+  ],
+  "extraPages": [
+    { "slug": "opr8-it-zeilen", "label": "OPR8-IT & zeilen" }
+  ],
+  "contact": {
+    "address": "Leopold Luypaertstraat 208, 1850 Grimbergen",
+    "phone": "0032479991561",
+    "email": "info@opr8-it.be",
+    "vat": "0847.525.919"
+  },
+  "domainCutover": {
+    "authoritative": "opr8-it.be",
+    "www": "www.opr8-it.be",
+    "currentRegistrarNs": ["ns01.one.com", "ns02.one.com"],
+    "target": "Combell hosting + DNS/NS cutover (not a new domain)"
+  }
+}
